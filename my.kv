@@ -1,0 +1,214 @@
+<HomeScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.png'
+    GridLayout:
+        cols: 1
+        rows: 6
+        Image:
+            source: 'title.png'
+        Button:
+            markup: True
+            text: "[font=Afacad-Regular.ttf]Test my knowledge![/font]"
+            on_press: root.Redirect('Test')
+        Button:
+            markup: True
+            text: '[font=Afacad-Regular.ttf]Understand connections[/font]'
+            on_press: root.Redirect('Qs')
+        Button:
+            markup: True
+            text: '[font=Afacad-Regular.ttf]Explore the topic[/font]'
+            on_press: root.Redirect('Gr')
+        Button:
+            markup: True
+            text: '[font=Afacad-Regular.ttf]Create graph[/font]'
+            on_press: root.Redirect('Up')
+        Button:
+            markup: True
+            text: '[font=Afacad-Regular.ttf]Browse existing graphs TBA[/font]'
+
+<Question>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.png'
+    GridLayout:
+        id: grid
+        cols: 1
+        rows: 2
+        Label:
+            markup: True
+            text:'[font=Afacad-Regular.ttf]aasdadsa[/font]'
+            text_size: (app.width*0.95, app.height*0.9)
+            font_size: '20sp'
+            id: chat
+            halign: 'justify'
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: 0.1
+            size_hint_x: 1
+            TextInput:
+                id: txt
+                hint_text: 'Start typing your question.'
+                size_hint_x: app.width*0.9
+            Button:
+                text: 'send'
+                on_release: root.input()
+                size_hint_x: app.width *0.1
+                Image:
+                    source: 'send1.png'
+                    center_y: self.parent.center_y
+                    center_x: self.parent.center_x
+                    allow_stretch: True
+        
+<Test>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.png'
+    GridLayout:
+        id: testgrid
+        cols: 1
+        rows: 4
+        #size_hint_y: 0.3
+        #size_hint_x: 1
+        Label:
+            markup: True
+            text:'[font=Afacad-Regular.ttf]Blah Blah question[/font]'
+            text_size: (app.width*0.95, app.height*0.2)
+            font_size: '36sp'
+            id: ques
+            halign: 'center'
+        Label:
+            id: answer
+            markup: True
+            text:'[font=Afacad-Regular.ttf]The answer is blah blah[/font]'
+            text_size: (app.width*0.95, app.height*0.2)
+            font_size: '28sp'
+            halign: 'center'
+        Button:
+            id: btn
+            markup: True
+            text: '[font=Afacad-Regular.ttf]Give me a question![/font]'
+            on_release: root.begin()
+            size_hint_x: 0.1
+            size_hint_y: 0.2
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: 0.2
+            size_hint_x: 1
+            TextInput:
+                id: txt
+                hint_text: 'Start typing your answer.'
+                size_hint_x: app.width*0.9
+            Button:
+                text: 'send'
+                on_release: root.submit()
+                size_hint_x: app.width *0.1
+                Image:
+                    source: 'send1.png'
+                    center_y: self.parent.center_y
+                    center_x: self.parent.center_x
+                    allow_stretch: True
+
+<Upload>:
+    canvas:
+        Color:
+            rgba: 0.3, 0.3, 0.3, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'vertical'
+    BoxLayout:
+        id: box
+        orientation: 'vertical'
+        Button:
+            id: up
+            size_hint_y: 0.1
+            text: 'Upload document!'
+            on_release: root.show_load()
+
+<RecycleView>:
+    id: rv
+    scroll_type: ['bars', 'content']
+    scroll_wheel_distance: dp(114)
+    bar_width: dp(10)
+    viewclass: 'SelectableLabel'
+    SelectableRecycleBoxLayout:
+        default_size: None, dp(56)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        multiselect: False
+        touch_multiselect: True    
+
+<Row@RecycleKVIDsDataViewBehavior+BoxLayout>:
+    canvas.before:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    value: ''
+    Label:
+        id: name
+    Label:
+        text: path
+
+<SelectableLabel>:
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            rgba: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+<NameDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        TextInput:
+            id: textin
+            size_hint_x: 0.7
+            pos: root.pos
+            size_hint_y: 0.1
+            hint_text: "Type the name."
+            multiline: False
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+            Button:
+                text: "Name"
+                on_release: root.create()
+
+
+# TEST: ALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMAALMA
